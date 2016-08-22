@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SampleGunBrokerItemsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SampleGunBrokerItems.dbo.Items' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="ItemID" />
+            <PropertyRef Name="SellerID" />
+            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="AltCategoryID" />
+            <PropertyRef Name="ItemTitle" />
+            <PropertyRef Name="Quantity" />
+            <PropertyRef Name="StartingBid" />
+            <PropertyRef Name="ReservePrice" />
+            <PropertyRef Name="BidCount" />
+            <PropertyRef Name="HighBidderID" />
+            <PropertyRef Name="CurrentBid" />
+            <PropertyRef Name="StartingDate" />
+            <PropertyRef Name="EndingDate" />
+            <PropertyRef Name="FeaturedListing" />
+            <PropertyRef Name="ShowcaseListing" />
+            <PropertyRef Name="Highlight" />
+            <PropertyRef Name="BoldfaceTitle" />
+            <PropertyRef Name="ColoredTitle" />
+            <PropertyRef Name="CreditCardLogo" />
+            <PropertyRef Name="HasCounter" />
+            <PropertyRef Name="HasPicture" />
+            <PropertyRef Name="BuyNowPrice" />
+            <PropertyRef Name="EligibleForImmediateCheckout" />
+          </Key>
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="SellerID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="AltCategoryID" Type="int" Nullable="false" />
+          <Property Name="ItemTitle" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="StartingBid" Type="money" Nullable="false" />
+          <Property Name="ReservePrice" Type="money" Nullable="false" />
+          <Property Name="BidCount" Type="int" Nullable="false" />
+          <Property Name="HighBidderID" Type="int" Nullable="false" />
+          <Property Name="CurrentBid" Type="money" Nullable="false" />
+          <Property Name="StartingDate" Type="datetime2" Precision="3" Nullable="false" />
+          <Property Name="EndingDate" Type="datetime2" Precision="3" Nullable="false" />
+          <Property Name="FeaturedListing" Type="tinyint" Nullable="false" />
+          <Property Name="ShowcaseListing" Type="tinyint" Nullable="false" />
+          <Property Name="Highlight" Type="bit" Nullable="false" />
+          <Property Name="BoldfaceTitle" Type="bit" Nullable="false" />
+          <Property Name="ColoredTitle" Type="int" Nullable="false" />
+          <Property Name="CreditCardLogo" Type="bit" Nullable="false" />
+          <Property Name="HasCounter" Type="bit" Nullable="false" />
+          <Property Name="HasPicture" Type="bit" Nullable="false" />
+          <Property Name="Thumbnail" Type="varchar" MaxLength="50" />
+          <Property Name="BuyNowPrice" Type="money" Nullable="false" />
+          <Property Name="Condition" Type="varchar" MaxLength="13" />
+          <Property Name="Subtitle" Type="varchar" MaxLength="50" />
+          <Property Name="FixedPrice" Type="money" />
+          <Property Name="HasQuickLook" Type="bit" />
+          <Property Name="SKU" Type="varchar" MaxLength="30" />
+          <Property Name="SerialNumber" Type="varchar" MaxLength="20" />
+          <Property Name="EligibleForImmediateCheckout" Type="bit" Nullable="false" />
+          <Property Name="Char_Manufacturer" Type="varchar" MaxLength="100" />
+          <Property Name="Char_Model" Type="varchar" MaxLength="100" />
+          <Property Name="Char_Caliber" Type="varchar" MaxLength="100" />
+          <Property Name="Char_Gauge" Type="varchar" MaxLength="100" />
+          <Property Name="Char_BarrelLength" Type="varchar" MaxLength="100" />
+          <Property Name="Char_Capacity" Type="varchar" MaxLength="100" />
+          <Property Name="Char_SlideFinish" Type="varchar" MaxLength="100" />
+          <Property Name="Char_FrameFinish" Type="varchar" MaxLength="100" />
+          <Property Name="Char_Grips" Type="varchar" MaxLength="100" />
+          <Property Name="Char_NumberOfRounds" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityContainer Name="SampleGunBrokerItemsModelStoreContainer">
+          <EntitySet Name="Items" EntityType="Self.Items" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Items].[ItemID] AS [ItemID], 
+    [Items].[SellerID] AS [SellerID], 
+    [Items].[CategoryID] AS [CategoryID], 
+    [Items].[AltCategoryID] AS [AltCategoryID], 
+    [Items].[ItemTitle] AS [ItemTitle], 
+    [Items].[Quantity] AS [Quantity], 
+    [Items].[StartingBid] AS [StartingBid], 
+    [Items].[ReservePrice] AS [ReservePrice], 
+    [Items].[BidCount] AS [BidCount], 
+    [Items].[HighBidderID] AS [HighBidderID], 
+    [Items].[CurrentBid] AS [CurrentBid], 
+    [Items].[StartingDate] AS [StartingDate], 
+    [Items].[EndingDate] AS [EndingDate], 
+    [Items].[FeaturedListing] AS [FeaturedListing], 
+    [Items].[ShowcaseListing] AS [ShowcaseListing], 
+    [Items].[Highlight] AS [Highlight], 
+    [Items].[BoldfaceTitle] AS [BoldfaceTitle], 
+    [Items].[ColoredTitle] AS [ColoredTitle], 
+    [Items].[CreditCardLogo] AS [CreditCardLogo], 
+    [Items].[HasCounter] AS [HasCounter], 
+    [Items].[HasPicture] AS [HasPicture], 
+    [Items].[Thumbnail] AS [Thumbnail], 
+    [Items].[BuyNowPrice] AS [BuyNowPrice], 
+    [Items].[Condition] AS [Condition], 
+    [Items].[Subtitle] AS [Subtitle], 
+    [Items].[FixedPrice] AS [FixedPrice], 
+    [Items].[HasQuickLook] AS [HasQuickLook], 
+    [Items].[SKU] AS [SKU], 
+    [Items].[SerialNumber] AS [SerialNumber], 
+    [Items].[EligibleForImmediateCheckout] AS [EligibleForImmediateCheckout], 
+    [Items].[Char_Manufacturer] AS [Char_Manufacturer], 
+    [Items].[Char_Model] AS [Char_Model], 
+    [Items].[Char_Caliber] AS [Char_Caliber], 
+    [Items].[Char_Gauge] AS [Char_Gauge], 
+    [Items].[Char_BarrelLength] AS [Char_BarrelLength], 
+    [Items].[Char_Capacity] AS [Char_Capacity], 
+    [Items].[Char_SlideFinish] AS [Char_SlideFinish], 
+    [Items].[Char_FrameFinish] AS [Char_FrameFinish], 
+    [Items].[Char_Grips] AS [Char_Grips], 
+    [Items].[Char_NumberOfRounds] AS [Char_NumberOfRounds]
+    FROM [dbo].[Items] AS [Items]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SampleGunBrokerItemsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemID" />
+            <PropertyRef Name="SellerID" />
+            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="AltCategoryID" />
+            <PropertyRef Name="ItemTitle" />
+            <PropertyRef Name="Quantity" />
+            <PropertyRef Name="StartingBid" />
+            <PropertyRef Name="ReservePrice" />
+            <PropertyRef Name="BidCount" />
+            <PropertyRef Name="HighBidderID" />
+            <PropertyRef Name="CurrentBid" />
+            <PropertyRef Name="StartingDate" />
+            <PropertyRef Name="EndingDate" />
+            <PropertyRef Name="FeaturedListing" />
+            <PropertyRef Name="ShowcaseListing" />
+            <PropertyRef Name="Highlight" />
+            <PropertyRef Name="BoldfaceTitle" />
+            <PropertyRef Name="ColoredTitle" />
+            <PropertyRef Name="CreditCardLogo" />
+            <PropertyRef Name="HasCounter" />
+            <PropertyRef Name="HasPicture" />
+            <PropertyRef Name="BuyNowPrice" />
+            <PropertyRef Name="EligibleForImmediateCheckout" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="SellerID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="AltCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="ItemTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="StartingBid" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ReservePrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="BidCount" Type="Int32" Nullable="false" />
+          <Property Name="HighBidderID" Type="Int32" Nullable="false" />
+          <Property Name="CurrentBid" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="StartingDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndingDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FeaturedListing" Type="Byte" Nullable="false" />
+          <Property Name="ShowcaseListing" Type="Byte" Nullable="false" />
+          <Property Name="Highlight" Type="Boolean" Nullable="false" />
+          <Property Name="BoldfaceTitle" Type="Boolean" Nullable="false" />
+          <Property Name="ColoredTitle" Type="Int32" Nullable="false" />
+          <Property Name="CreditCardLogo" Type="Boolean" Nullable="false" />
+          <Property Name="HasCounter" Type="Boolean" Nullable="false" />
+          <Property Name="HasPicture" Type="Boolean" Nullable="false" />
+          <Property Name="Thumbnail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BuyNowPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Condition" Type="String" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="Subtitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FixedPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="HasQuickLook" Type="Boolean" />
+          <Property Name="SKU" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SerialNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EligibleForImmediateCheckout" Type="Boolean" Nullable="false" />
+          <Property Name="Char_Manufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_Model" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_Caliber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_Gauge" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_BarrelLength" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_Capacity" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_SlideFinish" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_FrameFinish" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_Grips" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Char_NumberOfRounds" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="SampleGunBrokerItemsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Items" EntityType="Self.Item" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SampleGunBrokerItemsModelStoreContainer" CdmEntityContainer="SampleGunBrokerItemsEntities">
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="SampleGunBrokerItemsModel.Item">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="SellerID" ColumnName="SellerID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="AltCategoryID" ColumnName="AltCategoryID" />
+                <ScalarProperty Name="ItemTitle" ColumnName="ItemTitle" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="StartingBid" ColumnName="StartingBid" />
+                <ScalarProperty Name="ReservePrice" ColumnName="ReservePrice" />
+                <ScalarProperty Name="BidCount" ColumnName="BidCount" />
+                <ScalarProperty Name="HighBidderID" ColumnName="HighBidderID" />
+                <ScalarProperty Name="CurrentBid" ColumnName="CurrentBid" />
+                <ScalarProperty Name="StartingDate" ColumnName="StartingDate" />
+                <ScalarProperty Name="EndingDate" ColumnName="EndingDate" />
+                <ScalarProperty Name="FeaturedListing" ColumnName="FeaturedListing" />
+                <ScalarProperty Name="ShowcaseListing" ColumnName="ShowcaseListing" />
+                <ScalarProperty Name="Highlight" ColumnName="Highlight" />
+                <ScalarProperty Name="BoldfaceTitle" ColumnName="BoldfaceTitle" />
+                <ScalarProperty Name="ColoredTitle" ColumnName="ColoredTitle" />
+                <ScalarProperty Name="CreditCardLogo" ColumnName="CreditCardLogo" />
+                <ScalarProperty Name="HasCounter" ColumnName="HasCounter" />
+                <ScalarProperty Name="HasPicture" ColumnName="HasPicture" />
+                <ScalarProperty Name="Thumbnail" ColumnName="Thumbnail" />
+                <ScalarProperty Name="BuyNowPrice" ColumnName="BuyNowPrice" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
+                <ScalarProperty Name="FixedPrice" ColumnName="FixedPrice" />
+                <ScalarProperty Name="HasQuickLook" ColumnName="HasQuickLook" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="EligibleForImmediateCheckout" ColumnName="EligibleForImmediateCheckout" />
+                <ScalarProperty Name="Char_Manufacturer" ColumnName="Char_Manufacturer" />
+                <ScalarProperty Name="Char_Model" ColumnName="Char_Model" />
+                <ScalarProperty Name="Char_Caliber" ColumnName="Char_Caliber" />
+                <ScalarProperty Name="Char_Gauge" ColumnName="Char_Gauge" />
+                <ScalarProperty Name="Char_BarrelLength" ColumnName="Char_BarrelLength" />
+                <ScalarProperty Name="Char_Capacity" ColumnName="Char_Capacity" />
+                <ScalarProperty Name="Char_SlideFinish" ColumnName="Char_SlideFinish" />
+                <ScalarProperty Name="Char_FrameFinish" ColumnName="Char_FrameFinish" />
+                <ScalarProperty Name="Char_Grips" ColumnName="Char_Grips" />
+                <ScalarProperty Name="Char_NumberOfRounds" ColumnName="Char_NumberOfRounds" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

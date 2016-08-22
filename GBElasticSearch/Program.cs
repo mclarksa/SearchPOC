@@ -10,6 +10,8 @@ namespace GBElasticSearch
     {
         static void Main(string[] args)
         {
+            var test = new ExportToElasticSearch();
+            test.GetGBData();
         }
     }
 }

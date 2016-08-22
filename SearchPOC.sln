@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GBElasticSearch", "GBElasticSearch\GBElasticSearch.csproj", "{C8345A11-6976-4B54-AE80-277F8B7B7074}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GBDB", "GBDB\GBDB.csproj", "{70F749C7-A6FA-405A-9D42-3746E300E684}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C8345A11-6976-4B54-AE80-277F8B7B7074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8345A11-6976-4B54-AE80-277F8B7B7074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8345A11-6976-4B54-AE80-277F8B7B7074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F749C7-A6FA-405A-9D42-3746E300E684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F749C7-A6FA-405A-9D42-3746E300E684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F749C7-A6FA-405A-9D42-3746E300E684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F749C7-A6FA-405A-9D42-3746E300E684}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
