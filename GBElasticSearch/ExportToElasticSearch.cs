@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -6,9 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
-using Elasticsearch.Net.Connection;
-using Elasticsearch.Net.ConnectionPool;
-using Elasticsearch.Net.JsonNet;
+using GBDB;
+using Nest;
 using Newtonsoft.Json;
 
 namespace GBElasticSearch
@@ -18,7 +18,7 @@ namespace GBElasticSearch
         // our instance of ourself as a singleton
         private static readonly ElasticSearch instance = new ElasticSearch();
 
-        ElasticsearchClient client;
+        ElasticClient client;
         string connectionString = ConfigurationManager.ConnectionStrings["Elasticsearch"].ConnectionString;
 
         /// <summary>
@@ -31,8 +31,11 @@ namespace GBElasticSearch
         {
             var node = new Uri(connectionString);
             var connectionPool = new SniffingConnectionPool(new[] { node });
-            var config = new ConnectionConfiguration(connectionPool);
-            client = new ElasticsearchClient(config);   // exposed in this class
+            var config = new ConnectionSettings(connectionPool);
+
+            client = new Nest.ElasticClient(config);
+
+
         }
 
         static ElasticSearch()
@@ -43,13 +46,7 @@ namespace GBElasticSearch
         /// Gets the instance of our singleton class
         /// </summary>
         /// <value>The instance.</value>
-        public static ElasticSearch Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static ElasticSearch Instance => instance;
 
         /// <summary>
         /// Log the specified module, id and json.
@@ -60,38 +57,77 @@ namespace GBElasticSearch
         /// <param name="json">Json.</param>
         public void Log(string type, string id, string json)
         {
-            client.Index("mta_log", type, id, json);
+            // client.Index("listing","mta_log", type, id, json);
         }
 
     }
     public class ExportToElasticSearch
     {
+        string connectionString = ConfigurationManager.ConnectionStrings["Elasticsearch"].ConnectionString;
         public ExportToElasticSearch()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["Elasticsearch"];
-            var node = new Uri("http://localhost:9200");
-            var connectionPool = new Elasticsearch.Net.ConnectionPool.SniffingConnectionPool(new[] {node});
-            var config = new ConnectionConfiguration(connectionPool);
-            Client = new ElasticsearchClient(config);
+            var node = new Uri(connectionString);
+            var connectionPool = new SniffingConnectionPool(new[] { node });
+            connectionPool.SniffedOnStartup = true;
+            
+            var config = new ConnectionSettings(connectionPool);
+            
+            Client = new Nest.ElasticClient(config);
         }
-        private static ElasticsearchClient Client { get; set; }
-        
-        public void GetGBData()
+        private static Nest.ElasticClient Client { get; set; }
+
+        public void TransferDbListings()
         {
-            
+
             var dbitems = new GBDB.GbItems();
-            var items =dbitems.Get();
-            decimal count = items.LongCount();
-            decimal itemCount = 0;
-            decimal pct = 0.000000000M;
-            foreach (var item in items)
-            {
-                Client.Index("gunbroker", "listing", JsonConvert.SerializeObject(item));
-                itemCount++;
-                pct = itemCount/count;
-                Debug.WriteLine(pct);
-            }
+            var items = dbitems.Get();
+
             
+            int skip = 0;
+            int threads = 5;
+            var take = 1000;
+            var count = items.Count();
+            var node = new Uri(connectionString);
+            
+
+
+            while (skip < count)
+            {
+
+
+
+                var mydict = new Dictionary<string, string>();
+
+                var dee = items.OrderBy(x => x.ItemID).Skip(skip).Take(take).Select(item => item).ToArray();
+                var request = new List<List<Item>>();
+                for (int i = 0; i < threads; i++)
+                {
+                    request.Add(
+                        new List<Item>(dee.Skip(i * take/threads).Take(take/threads).Select(x => x).ToList()));
+                }
+              
+                Parallel.ForEach<List<Item>>(request, p =>
+                {
+
+                    var connectionPool = new SniffingConnectionPool(new[] { node });
+                    connectionPool.SniffedOnStartup = true;
+
+
+                    var config = new ConnectionSettings(connectionPool);
+                    var client = new Nest.ElasticClient(config);
+
+
+                    client.IndexMany<Item>(p, "gunbroker", "listing");
+                });
+
+
+
+                skip += take;
+
+
+            }
+
+
 
         }
     }

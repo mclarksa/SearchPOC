@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "ElasticSearch";
+}
+
+@section featured {
+    <div class="content-wrapper">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@Page.Title.</h1>
+                <h2>Docker Implementation</h2>
+            </hgroup>
+
+            <p>
+                Type in some criteria to search on...
+            </p>
+
+        </div>
+
+    </section>
+    <section class="main-content">
+        <div class="panel panel-default">
+            <form>
+                <div class="form-group">
+                    
+                    <input type="text" id="criteria" placeholder="Type something..."/>
+                    <button class="btn btn-default" data-bind="click:search">Search</button>
+
+                </div>
+            </form>
+        </div>
+    </section>
+        <section class="content-wrapper">
+            <div data-bind="visible:true" class="panel">
+                <div class="panel panel-body">
+                    <h2>Results:</h2>
+                    <br />
+                    <ul>
+                      
+                        <li>Search Time: <span data-bind="text:took"></span> ms</li>
+                        <li>Max Score: <span data-bind="text: max_score"></span></li>
+                    </ul>
+                    <div class="panel" data-bind="koGrid:{
+                        data: items,
+                        enablePaging:true,
+                        displaySelectionCheckbox:false,
+                        multiSelect: false,
+                        pagingOptions:pagingOptions,    
+                        showGroupPanel: false, 
+                        showFilter: false,
+                        showColumnMenu: true, 
+                        watchDataItems: true,
+
+                        columnDefs: [
+                            { field: 'fields.itemTitle', displayName: 'Title' },
+                            { field: '_score', displayName: 'Score' },
+                            { field: 'fields.char_Manufacturer', displayName: 'Mfr' },
+                            { field: 'fields.char_Model', displayName: 'Model' },
+                            { field: 'fields.char_Caliber', displayName: 'Caliber' },
+                            { field: 'fields.char_BarrelLength', displayName: 'Barrel Length' },
+                            
+                            { field: 'fields.char_SlideFinish', displayName: 'Slide Finish' },
+                            { field: 'fields.char_FrameFinish', displayName: 'Frame Finish' },
+                            { field: 'fields.char_Grips', displayName: 'Grips' }
+                            ]}"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script language="javascript" type="text/javascript">
+
+        $(function() {
+
+            var vm = function() {
+                var that = this;
+                that.pagingOptions = {
+                    currentPage: ko.observable(1),
+                    pageSizes: ko.observableArray([10]),
+                    pageSize: ko.observable(10),
+                    totalServerItems: ko.observable(0)};
+
+                
+                that.items = ko.observableArray();
+                that.took = ko.observable(0);
+                that.showResults = ko.observable(false);
+                that.total = ko.observable(0);
+                that.max_score = ko.observable(0);
+                that.search = function () {
+                    that.showResults = ko.observable(false);
+                    that.criteria = $('#criteria').val();
+                    that.data = {
+                        size: that.pagingOptions.pageSize(),
+                        from: (that.pagingOptions.pageSize()*(that.pagingOptions.currentPage()-1)),
+                        query: {
+                            match: {
+                                '_all': that.criteria
+                            }
+                            
+                        },
+                        fields: ['_id', 'itemTitle', 'char_Manufacturer', 'char_Model', 'char_Caliber', 'char_BarrelLength', 'char_Capacity', 'char_SlideFinish', 'char_FrameFinish', 'char_Grips', '_score']
+                    };
+
+                    $.ajax({
+                        url: 'http://gbtest.com:9200/gunbroker/listing/_search',
+                        type: 'POST',
+                        //contentType: 'application/json; charset=UTF-8',
+                        crossDomain: true,
+                        dataType: 'json',
+                        origin: 'http://gbtest.com',
+                        data: JSON.stringify(that.data),
+                        success: function (response) {
+
+                            var data = response.hits.hits;
+                            that.pagingOptions.totalServerItems(response.hits.total);
+                            that.took(response.took);
+                            that.total(response.hits.total);
+                            that.max_score(response.hits.max_score);
+                            that.items.removeAll();
+                            that.showResults = ko.observable(true);
+                            if (data.length > 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    that.items.push(data[i]);
+                                }
+                            }
+                            
+                            that.items.notifySubscribers();
+                            
+                            $("div.kgViewport").css("height", "inherit");
+                           
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            if (jqXHR!==undefined && jqXHR.responseText !== "") {
+                                var jso = jQuery.parseJSON(jqXHR.responseText);
+
+                                alert('section', 'error', '(' + jqXHR.status + ') ' + errorThrown + ' --<br />' + jso.error);
+                            } else {
+
+                            }
+                        }
+                    });
+                }
+
+                that.pagingOptions.pageSize.subscribe(function (data) {
+            
+                    that.pagingOptions.currentPage(1);
+                    that.search();
+                });
+                that.pagingOptions.currentPage.subscribe(that.search);
+            }
+            
+            ko.applyBindings(new vm([]));
+
+            
+            $(".kgHeaderButton").hide();
+        });
+
+
+    </script>
+
+}

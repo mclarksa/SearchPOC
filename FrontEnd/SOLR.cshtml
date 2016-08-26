@@ -1,0 +1,144 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "SOLRSearch";
+}
+
+@section featured {
+    <div class="content-wrapper">
+        <section class="featured">
+            <div class="content-wrapper">
+                <hgroup class="title">
+                    <h1>@Page.Title.</h1>
+                    <h2>Docker Implementation</h2>
+                </hgroup>
+
+                <p>
+                    Type in some criteria to search on...
+                </p>
+
+            </div>
+
+        </section>
+        <section class="main-content">
+            <div class="panel panel-default">
+                <form>
+                    <div class="form-group">
+
+                        <input type="text" id="criteria" placeholder="Type something..." />
+                        <button class="btn btn-default" data-bind="click:search">Search</button>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div data-bind="visible:true" class="panel">
+                <div class="panel panel-body">
+                    <h2>Results:</h2>
+                    <br />
+               
+                    <div class="panel" data-bind="koGrid:{
+                        data: items,
+                        enablePaging:true,
+                        displaySelectionCheckbox:false,
+                        multiSelect: false,
+                        pagingOptions:pagingOptions,
+                        showGroupPanel: false,
+                        showFilter: false,
+                        showColumnMenu: true,
+                        watchDataItems: true,
+
+                        columnDefs: [
+                            { field: 'id', displayName: 'Item Id' },
+                            { field: 'content', displayName: 'Title' }
+                            ]}"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script language="javascript" type="text/javascript">
+
+
+        $(function() {
+
+            var vm = function() {
+                var that = this;
+                that.pagingOptions = {
+                    currentPage: ko.observable(1),
+                    pageSizes: ko.observableArray([10]),
+                    pageSize: ko.observable(10),
+                    totalServerItems: ko.observable(0)
+                };
+
+
+                that.items = ko.observableArray();
+                
+                that.showResults = ko.observable(false);
+                that.total = ko.observable(0);
+                that.max_score = ko.observable(0);
+                that.search = function() {
+                    that.showResults = ko.observable(false);
+                    that.criteria = $('#criteria').val();
+                    that.url = 'http://gbtest.com:8983/solr/SOLRListing/select?indent=on&q=' + that.criteria + '&rows=' + that.pagingOptions.pageSize() + '&start=' + (that.pagingOptions.pageSize() * (that.pagingOptions.currentPage() - 1)) + '&wt=json';
+
+
+                    $.ajax({
+                        url: that.url,
+                        type: 'GET',
+                        //contentType: 'application/json; charset=UTF-8',
+                        crossDomain: true,
+                        dataType: 'json',
+                        origin: 'http://gbtest.com',
+                        data: {},
+                        success: function(response) {
+                            
+                            var data = response.response.docs;
+                            that.pagingOptions.totalServerItems(response.response.numFound);
+                            
+                            that.total(response.response.numFound);
+                            
+                            that.items.removeAll();
+                            that.showResults = ko.observable(true);
+                            if (data.length > 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    that.items.push(data[i]);
+                                }
+                            }
+
+                            that.items.notifySubscribers();
+
+                            $("div.kgViewport").css("height", "inherit");
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            debugger
+                            
+                            if (jqXHR !== undefined && jqXHR.responseText !== "") {
+                                var jso = jQuery.parseJSON(jqXHR.responseText);
+
+                                alert('section', 'error', '(' + jqXHR.status + ') ' + errorThrown + ' --<br />' + jso.error);
+                            } else {
+
+                            }
+                        }
+                    });
+                }
+
+                that.pagingOptions.pageSize.subscribe(function(data) {
+
+                    that.pagingOptions.currentPage(1);
+                    that.search();
+                });
+                that.pagingOptions.currentPage.subscribe(that.search);
+            }
+
+            ko.applyBindings(new vm([]));
+
+
+            $(".kgHeaderButton").hide();
+        });
+
+
+    </script>
+
+}
