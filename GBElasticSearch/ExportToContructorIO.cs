@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace GBElasticSearch
 
             int skip = 0;
             int threads = 1;
-            var take = 10;
+            var take = 1000;
             var count = items.Count();
             
 
@@ -41,7 +42,7 @@ namespace GBElasticSearch
                         new List<ListItem>(dee.Skip(i * take / threads).Take(take / threads).Select(
                             x => 
                             new ListItem(
-                                x.ItemTitle,
+                               System.Web.HttpUtility.HtmlEncode(x.ItemTitle) ,
                                 "Products",
                                 x.ItemID.ToString(),
                                 "",
@@ -51,21 +52,19 @@ namespace GBElasticSearch
                                 null
                                 )
                                 )));
-                    System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(request[i]));
+                    
                 }
+                
                 foreach (var itemList in request)
                 {
-                    foreach (var prod in itemList)
-                    {
-                        client.AddOrUpdate(prod);
-                    }
-                    //client.AddBatch(itemList, "Products");
+                    
+                    client.AddOrUpdateBatch(itemList,ListItemAutocompleteType.Products);
                 }
                 
 
 
                 skip += take;
-
+                Debug.WriteLine(skip);
 
             }
 

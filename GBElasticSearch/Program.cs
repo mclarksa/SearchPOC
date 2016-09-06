@@ -10,12 +10,14 @@ namespace GBElasticSearch
     {
         static void Main(string[] args)
         {
-           //var test = new ExportToElasticSearch();
-            //test.TransferDbListings();
-            //var constructorIO = new ExportToContructorIO();
+           var test = new ExportToElasticSearch();
+           test.TransferDbListings();
+           // var constructorIO = new ExportToContructorIO();
             //constructorIO.TransferDbListings();
-            var solr = new ExportToSOLR();
-            solr.Export();
+            //var solr = new ExportToSOLR();
+            //solr.Export();
+            //var cloudsearch = new ExportToCloudSearch();
+            //cloudsearch.Export();
         }
     }
 }

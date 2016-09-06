@@ -63,7 +63,7 @@ namespace GBElasticSearch
     }
     public class ExportToElasticSearch
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["Elasticsearch"].ConnectionString;
+        private string connectionString = "http://search-gbtest-4cdgkcde4srpuyzw337hhdf63i.us-east-1.es.amazonaws.com";// ConfigurationManager.ConnectionStrings["Elasticsearch"].ConnectionString;
         public ExportToElasticSearch()
         {
             var node = new Uri(connectionString);
@@ -83,9 +83,9 @@ namespace GBElasticSearch
             var items = dbitems.Get();
 
             
-            int skip = 0;
+            int skip = 40000;
             int threads = 5;
-            var take = 1000;
+            var take = 5000;
             var count = items.Count();
             var node = new Uri(connectionString);
             
@@ -98,7 +98,7 @@ namespace GBElasticSearch
 
                 var mydict = new Dictionary<string, string>();
 
-                var dee = items.OrderBy(x => x.ItemID).Skip(skip).Take(take).Select(item => item).ToArray();
+                var dee = items.OrderBy(x => x.ItemID).Skip(skip).Take(take).Select(item => item);
                 var request = new List<List<Item>>();
                 for (int i = 0; i < threads; i++)
                 {
@@ -115,15 +115,23 @@ namespace GBElasticSearch
 
                     var config = new ConnectionSettings(connectionPool);
                     var client = new Nest.ElasticClient(config);
+                    
+                    var type = new TypeName {Name = "listing",Type= typeof (Item)};
+                    var indexName = new IndexName { Name = "gunbroker",Type=type.Type };
+                    var bulkRequest = new BulkRequest(indexName);
+                    var operations = p.Select(item => new BulkIndexOperation<Item>(item)).Cast<IBulkOperation>().ToList();
+                    bulkRequest.Operations = operations;
+                    client.Bulk(bulkRequest);
+                    //client.IndexMany<Item>(p, "gunbroker", "listing");
+                    config = null;
+                    client = null;
 
-
-                    client.IndexMany<Item>(p, "gunbroker", "listing");
                 });
 
 
-
+                
                 skip += take;
-
+                Debug.WriteLine(skip);
 
             }
 

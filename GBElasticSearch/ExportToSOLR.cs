@@ -49,6 +49,7 @@ namespace GBElasticSearch
                                     //    SlideFinish = x.Char_SlideFinish,
                                     //    Gauge = x.Char_Gauge,
                                         Id = x.ItemID,
+                                        ItemId=x.ItemID,
                                         //Manufacturer = x.Char_Manufacturer,
                                         //Model = x.Char_Model,
                                         //ShowcaseListing = x.ShowcaseListing,
@@ -58,8 +59,12 @@ namespace GBElasticSearch
 
                                     })
                                     .ToList();
-                //var schema = solr.GetSchema();
-                solr.AddRange(mappeditems, new AddParameters() { Overwrite = true });
+               // var schema = solr.GetSchema();
+                foreach (var solrListing in mappeditems)
+                {
+                    solr.Add(solrListing);
+                }
+                //solr.AddRange(mappeditems, new AddParameters() { Overwrite = true });
                 solr.Commit();
                 skip += take;
                 Debug.WriteLine($"Total:{skip}");

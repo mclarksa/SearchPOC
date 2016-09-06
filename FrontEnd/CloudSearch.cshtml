@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/_SiteLayout.cshtml";
-    Page.Title = "SOLRSearch";
+    Page.Title = "Amazon CloudSearch";
 }
 
 @section featured {
@@ -9,7 +9,7 @@
             <div class="content-wrapper">
                 <hgroup class="title">
                     <h1>@Page.Title.</h1>
-                    <h2>Docker Implementation</h2>
+                    <h2>AWS Implementation</h2>
                 </hgroup>
 
                 <p>
@@ -35,12 +35,9 @@
             <div data-bind="visible:true" class="panel">
                 <div class="panel panel-body">
                     <h2>Results:</h2>
+                    <p><span>Took: </span><span data-bind="text:took"></span>ms</p>
                     <br />
-                    <ul>
 
-                        <li>Search Time: <span data-bind="text:took"></span> ms</li>
-                        
-                    </ul>
                     <div class="panel" data-bind="koGrid:{
                         data: items,
                         enablePaging:true,
@@ -54,7 +51,7 @@
 
                         columnDefs: [
                             { field: 'id', displayName: 'Item Id' },
-                            { field: 'content', displayName: 'Title' }
+                            { field: 'fields.content', displayName: 'Title' }
                             ]}"></div>
                 </div>
             </div>
@@ -78,31 +75,29 @@
                 that.items = ko.observableArray();
                 
                 that.showResults = ko.observable(false);
+                
                 that.total = ko.observable(0);
-                that.max_score = ko.observable(0);
                 that.took = ko.observable(0);
                 that.search = function() {
                     that.showResults = ko.observable(false);
                     that.criteria = $('#criteria').val();
-                    that.url = 'http://gbtest.com:8983/solr/SOLRListing/select?indent=on&q=' + that.criteria + '&rows=' + that.pagingOptions.pageSize() + '&start=' + (that.pagingOptions.pageSize() * (that.pagingOptions.currentPage() - 1)) + '&wt=json';
+                    //that.url = 'http://gbtest.com:8983/solr/SOLRListing/select?indent=on&q=' + that.criteria + '&rows=' + that.pagingOptions.pageSize() + '&start=' + (that.pagingOptions.pageSize() * (that.pagingOptions.currentPage() - 1)) + '&wt=json';
+                    that.url = 'https://00n8zlruxa.execute-api.us-east-1.amazonaws.com/gbProd?q=' + that.criteria + '&q.parser=simple&start=' + (that.pagingOptions.pageSize() * (that.pagingOptions.currentPage() - 1)) + '&size=' + that.pagingOptions.pageSize() ;
 
-                    that.startTime = new Date();
-                    
                     $.ajax({
                         url: that.url,
                         type: 'GET',
-                        //contentType: 'application/json; charset=UTF-8',
+                        contentType: 'application/json; charset=UTF-8',
                         crossDomain: true,
                         dataType: 'json',
-                        origin: 'http://gbtest.com',
-                        data: {},
+                        origin:window.location,
+                        
                         success: function(response) {
-                            var endTime = new Date();
-
-                            var data = response.response.docs;
-                            that.pagingOptions.totalServerItems(response.response.numFound);
-                            that.took(endTime - that.startTime);
-                            that.total(response.response.numFound);
+                            
+                            var data = response.hits.hit;
+                            that.pagingOptions.totalServerItems(response.hits.found);
+                            that.took(response.status["time-ms"]);
+                            that.total(response.hits.found);
                             
                             that.items.removeAll();
                             that.showResults = ko.observable(true);
@@ -115,6 +110,7 @@
                             that.items.notifySubscribers();
 
                             $("div.kgViewport").css("height", "inherit");
+
 
                         },
                         error: function(jqXHR, textStatus, errorThrown) {

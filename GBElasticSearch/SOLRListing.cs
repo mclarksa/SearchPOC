@@ -15,4 +15,26 @@ namespace GBElasticSearch
         
 
     }
+
+    public class Fields
+    {
+        public string content { get; set; }
+    }
+    public class CloudSearchListing
+    {
+        public string type { get; set; }
+        public CloudSearchListing()
+        {
+            fields = new Fields();
+        }
+        public int id { get; set; }
+        
+        public Fields fields { get; set; }
+        
+
+        
+        public string content { get; set; }
+
+
+    }
 }
